@@ -11,13 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.javaex.dao.GuestDao;
+import com.javaex.util.WebUtil;
 import com.javaex.vo.GuestVo;
 
 @WebServlet("/gbc")
 public class GuestBookController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-System.out.println("컨트롤러");
+		System.out.println("컨트롤러");
 		
 		String action = request.getParameter("action");
 		System.out.println(action);
@@ -30,8 +31,9 @@ System.out.println("컨트롤러");
 			
 			request.setAttribute("gList", guestList);
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/addList.jsp");
-			rd.forward(request, response);
+			//RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/addList.jsp");
+			//rd.forward(request, response);
+			WebUtil.forword(request, response, "/WEB-INF/addList.jsp");
 			
 		} else if ("add".equals(action)) {
 			System.out.println("[등록]");
@@ -48,13 +50,15 @@ System.out.println("컨트롤러");
 			
 			guestDao.guestInsert(guestVo);
 			
-			response.sendRedirect("/guestbook2/gbc?action=addList");
+			//response.sendRedirect("/guestbook2/gbc?action=addList");
+			WebUtil.redirect(request, response, "/guestbook2/gbc?action=addList");
 			
 		} else if("dform".equals(action)) {
 			System.out.println("[삭제폼]");
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/deleteForm.jsp");
-			rd.forward(request, response);
+			//RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/deleteForm.jsp");
+			//rd.forward(request, response);
+			WebUtil.forword(request, response, "/WEB-INF/deleteForm.jsp");
 			
 		} else if("delete".equals(action)) {
 			System.out.println("[삭제]");
@@ -68,7 +72,8 @@ System.out.println("컨트롤러");
 			
 			int count = guestDao.guestDelete(no, password);
 			
-			response.sendRedirect("/guestbook2/gbc?action=addList");
+			//response.sendRedirect("/guestbook2/gbc?action=addList");
+			WebUtil.redirect(request, response, "/guestbook2/gbc?action=addList");
 
 		}
 	}
